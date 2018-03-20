@@ -22,7 +22,7 @@ namespace Chapaev.Core
 				var checker1 = checker;
 				checker1.SelectEvent += () =>
 				{
-					_pushed = checker1; 
+					_pushed = checker1.GetComponent<IPushed>(); 
 				};
 			}
 		}
@@ -43,6 +43,8 @@ namespace Chapaev.Core
 				
 				_pusher.SetForce(_forceCalculator.GetForce());
 				_pusher.Push(_pushed);
+
+				_pushed = null;
 			}
 		}
 	}
