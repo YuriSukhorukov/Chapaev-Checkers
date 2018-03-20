@@ -1,0 +1,38 @@
+# Unity generated #
+Temp/
+Builds/
+Library/
+ProjectSettings/
+
+# Visual Studio / MonoDevelop / Rider generated
+JetBrains/
+.idea/
+ExportedObj/
+obj/
+*.svd
+*.userprefs
+/*.csproj
+*.pidb
+*.suo
+/*.sln
+*.user
+*.unityproj
+*.booproj
+JetBrains.meta
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Compiled project
+*.apk
+*.exe
+*.dmg
+*/Assets/UnityVS.meta
+*/Assets/UnityVS/
+*/Assets/NGUI/Examples/*
