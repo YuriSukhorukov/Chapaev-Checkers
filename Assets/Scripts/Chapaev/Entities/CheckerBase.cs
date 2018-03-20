@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Chapaev.Entities
 {
-    public class CheckerBase : MonoBehaviour, IPushed, ISelectable
+    public class CheckerBase : MonoBehaviour, ISelectable
     {
         public event Action SelectEvent;
         
@@ -12,11 +12,6 @@ namespace Chapaev.Entities
         {
             if (SelectEvent != null)
                 SelectEvent.Invoke();
-        }
-
-        public void Push(Vector3 force)
-        {
-            GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
         }
     }
 }
