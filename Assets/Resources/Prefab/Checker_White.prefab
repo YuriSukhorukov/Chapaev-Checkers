@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 54270536702215408}
   - component: {fileID: 135825397526096422}
   - component: {fileID: 114951639960984276}
+  - component: {fileID: 114210357853308164}
   m_Layer: 8
   m_Name: Checker_White
   m_TagString: Untagged
@@ -38,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1489009038393276}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.6, y: 0.1, z: -4.2}
+  m_LocalPosition: {x: -4.4, y: 0.1, z: -4.4}
   m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -100,6 +101,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &114210357853308164
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1489009038393276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671db61c30ce54b4d923b9e9b496f147, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114951639960984276
 MonoBehaviour:
   m_ObjectHideFlags: 1

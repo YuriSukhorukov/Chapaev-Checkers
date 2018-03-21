@@ -7,6 +7,7 @@ namespace Chapaev.Entities
     public class CheckerBase : MonoBehaviour, ISelectable
     {
         public event Action SelectEvent;
+        public CheckerColor CheckerColor { get; set; }
         
         public void Select()
         {

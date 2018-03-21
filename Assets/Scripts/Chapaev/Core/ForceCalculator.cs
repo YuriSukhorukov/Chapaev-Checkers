@@ -7,6 +7,9 @@ namespace Chapaev.Core
     {
         private Vector3 _pos1;
         private Vector3 _pos2;
+
+        private const float MaxForceMagnitude = 20;
+        private const int K = 10;
 		
         public void SetFirstPoint(Vector3 pos)
         {
@@ -22,10 +25,8 @@ namespace Chapaev.Core
 		
         public Vector3 GetForce()
         {
-            const float maxForceMagnitude = 10;
-            const int k = 10;
-            Vector3 force = (_pos2 - _pos1) / k;
-            force = force.magnitude > maxForceMagnitude ? force * (maxForceMagnitude / force.magnitude) : force;
+            Vector3 force = (_pos2 - _pos1) / K;
+            force = force.magnitude > MaxForceMagnitude ? force * (MaxForceMagnitude / force.magnitude) : force;
 
             return force;
         }

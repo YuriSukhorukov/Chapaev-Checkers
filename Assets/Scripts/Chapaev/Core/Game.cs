@@ -11,11 +11,16 @@ namespace Chapaev.Core
 		private IPusher _pusher;
 		private IPushed _pushed;
 		private IForceCalculator _forceCalculator;
+		private IBoardBuilder _boardBuilder;
+		private Board _board;
 
 		private void Start () {
 			_forceCalculator = new ForceCalculator();
 			_selector = new Selector3D();
 			_pusher = new Pusher();
+			_boardBuilder = new BoardBuilder();
+
+			_board = _boardBuilder.Build();
 
 			foreach (var checker in FindObjectsOfType<CheckerBase>())
 			{
@@ -23,6 +28,7 @@ namespace Chapaev.Core
 				checker1.SelectEvent += () =>
 				{
 					_pushed = checker1.GetComponent<IPushed>(); 
+					print(checker1.CheckerColor);
 				};
 			}
 		}
