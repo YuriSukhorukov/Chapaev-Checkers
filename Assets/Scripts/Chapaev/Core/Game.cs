@@ -39,12 +39,15 @@ namespace Chapaev.Core
 				_pusher.SetForce(_forceCalculator.GetForce(distance));
 				MakeMove();
 			};
+
+			AIClick();
 		}
 
 		private void Update()
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
+				print(Input.mousePosition);
 				_inputHandler.OnDown(Input.mousePosition);
 			}
 
@@ -64,6 +67,12 @@ namespace Chapaev.Core
 			
 			_pusher.Push(_pushed);
 			_pushed = null;
+		}
+
+		private void AIClick()
+		{
+			_inputHandler.OnDown(Camera.main.WorldToScreenPoint(_board.CheckersWhite[0].transform.position));
+			_inputHandler.OnUp(Camera.main.WorldToScreenPoint(_board.CheckersBlack[5].transform.position));
 		}
 	}
 }
