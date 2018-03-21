@@ -1,4 +1,5 @@
-﻿using Chapaev.Behaviours;
+﻿using System.Linq;
+using Assets.Scripts.Chapaev.Core;
 using Chapaev.Entities;
 using Chapaev.Interfaces;
 using UnityEngine;
@@ -7,51 +8,62 @@ namespace Chapaev.Core
 {
 	public class Game : MonoBehaviour
 	{
+		private IInputHandler _inputHandler;
+		private IForceCalculator _forceCalculator;
+		private IBoardBuilder _boardBuilder;
 		private ISelector _selector;
 		private IPusher _pusher;
 		private IPushed _pushed;
-		private IForceCalculator _forceCalculator;
-		private IBoardBuilder _boardBuilder;
 		private Board _board;
+
+		public CheckerColor ActiveCheckerColor;
 
 		private void Start () {
 			_forceCalculator = new ForceCalculator();
 			_selector = new Selector3D();
 			_pusher = new Pusher();
 			_boardBuilder = new BoardBuilder();
+			_inputHandler = new MouseInputHandler();
 
 			_board = _boardBuilder.Build();
 
-			foreach (var checker in FindObjectsOfType<CheckerBase>())
+			foreach (var checker in _board.CheckersWhite.Concat(_board.CheckersBlack))
 			{
 				var checker1 = checker;
-				checker1.SelectEvent += () =>
-				{
-					_pushed = checker1.GetComponent<IPushed>(); 
-					print(checker1.CheckerColor);
-				};
+				checker1.SelectEvent += () => { _pushed = checker1.GetComponent<IPushed>(); };
 			}
+
+			_inputHandler.OnDownEvent += (position) => _selector.SelectFrom(position);
+			_inputHandler.OnUpEvent += (distance) =>
+			{
+				_pusher.SetForce(_forceCalculator.GetForce(distance));
+				MakeMove();
+			};
 		}
 
 		private void Update()
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
-				_forceCalculator.SetFirstPoint(Input.mousePosition);	
-				_selector.SelectFrom(Input.mousePosition);
+				_inputHandler.OnDown(Input.mousePosition);
 			}
 
 			if (Input.GetMouseButtonUp(0))
 			{
-				if(_pushed == null) return;
-				
-				_forceCalculator.SetLastPoint(Input.mousePosition);
-				
-				_pusher.SetForce(_forceCalculator.GetForce());
-				_pusher.Push(_pushed);
-
-				_pushed = null;
+				_inputHandler.OnUp(Input.mousePosition);
 			}
+		}
+		
+		private void MakeMove()
+		{	
+			if(_pushed == null) return;
+			
+			if(((MonoBehaviour) _pushed).GetComponent<CheckerBase>().CheckerColor != ActiveCheckerColor) return;
+			
+			ActiveCheckerColor = ActiveCheckerColor == CheckerColor.WHITE ? CheckerColor.BLACK : CheckerColor.WHITE;
+			
+			_pusher.Push(_pushed);
+			_pushed = null;
 		}
 	}
 }

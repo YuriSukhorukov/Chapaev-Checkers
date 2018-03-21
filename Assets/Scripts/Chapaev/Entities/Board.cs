@@ -5,8 +5,8 @@ namespace Chapaev.Entities
 {
     public class Board
     {
-        private List<CheckerBase> CheckersWhite { get; set; }
-        private List<CheckerBase> CheckersBlack { get; set; }
+        public List<CheckerBase> CheckersWhite { get; private set; }
+        public List<CheckerBase> CheckersBlack { get; private set; }
         
         public void AddWhiteFigure(CheckerBase checker)
         {

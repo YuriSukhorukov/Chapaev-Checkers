@@ -24,8 +24,16 @@ namespace Chapaev.Core
         }
 		
         public Vector3 GetForce()
-        {
-            Vector3 force = (_pos2 - _pos1) / K;
+        {   
+            Vector3 force = _pos2 - _pos1 / K;
+            force = force.magnitude > MaxForceMagnitude ? force * (MaxForceMagnitude / force.magnitude) : force;
+
+            return force;
+        }
+        
+        public Vector3 GetForce(Vector3 distance)
+        {   
+            Vector3 force = distance / K;
             force = force.magnitude > MaxForceMagnitude ? force * (MaxForceMagnitude / force.magnitude) : force;
 
             return force;
