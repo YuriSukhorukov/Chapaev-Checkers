@@ -13,7 +13,7 @@ namespace Chapaev.Core
         }
         public void Push(IPushed pushed)
         {
-            pushed.Push(_force);
+            pushed.PushIt(_force);
         }
     }
 }

@@ -4,6 +4,6 @@ namespace Chapaev.Interfaces
 {
     public interface IPushed
     {
-        void Push(Vector3 force);
+        void PushIt(Vector3 force);
     }
 }
