@@ -34,7 +34,7 @@ namespace Chapaev.Core
         public Vector3 GetForce(Vector3 distance)
         {   
             Vector3 force = distance / K;
-            force.y = 0;
+            //force.y = 0;
             force = force.magnitude > MaxForceMagnitude ? force * (MaxForceMagnitude / force.magnitude) : force;
 
             return force;

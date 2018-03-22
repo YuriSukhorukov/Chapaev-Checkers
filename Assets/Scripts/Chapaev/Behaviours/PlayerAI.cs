@@ -1,4 +1,6 @@
-﻿using Chapaev.Entities;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Chapaev.Values;
+using Chapaev.Entities;
 using Chapaev.Interfaces;
 using UnityEngine;
 
@@ -20,23 +22,38 @@ namespace Assets.Scripts.Chapaev.Core
         private float _t = 0.0f;
         private bool _aimingEnabled;
 
-        public PlayerAI(IInputHandler mouseInputHandler, Board board)
+        private List<CheckerBase> _myCheckers;
+        private List<CheckerBase> _enemyCheckers;
+
+        public PlayerAI(IInputHandler mouseInputHandler, Board board, CheckerColor checkerColor)
         {
             _inputHandler = mouseInputHandler;
             _board = board;
+
+            switch (checkerColor)
+            {
+                case CheckerColor.WHITE:
+                    _myCheckers = _board.CheckersWhite;
+                    _enemyCheckers = _board.CheckersBlack;
+                    break;
+                case CheckerColor.BLACK:
+                    _myCheckers = _board.CheckersBlack;
+                    _enemyCheckers = _board.CheckersWhite;
+                    break;
+            }
         }
 
         private void SelectPushChecker()
         {
-            int index = Random.Range(0, _board.CheckersWhite.Count - 1);
-            _checkerPush = _board.CheckersBlack[index];
+            int index = Random.Range(0, _myCheckers.Count - 1);
+            _checkerPush = _myCheckers[index];
             _pointPress = _checkerPush.transform.position;
         }
 
         private void SelectTargetChecker()
         {
-            int index = Random.Range(0, _board.CheckersWhite.Count - 1);
-            _checkerTarget = _board.CheckersWhite[index];
+            int index = Random.Range(0, _enemyCheckers.Count - 1);
+            _checkerTarget = _enemyCheckers[index];
             _pointRelease = _checkerTarget.transform.position;
         }
 
