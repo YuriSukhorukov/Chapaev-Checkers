@@ -18,6 +18,7 @@ namespace Chapaev.Core
 		private Board _board;
 		private TurnSwitcher _turnSwitcher;
 		private ForceLine _forceLine;
+		private PlayerAI _playerAI;
 
 //		public CheckerColor ActiveCheckerColor;
 
@@ -26,11 +27,13 @@ namespace Chapaev.Core
 			_forceCalculator = new ForceCalculator();
 			_selector = new Selector3D();
 			_pusher = new Pusher();
+			_forceLine = new ForceLine();
 			_boardBuilder = new BoardBuilder();
 			_inputHandler = new MouseInputHandler();
 
 			_board = _boardBuilder.Build();
 			_turnSwitcher = new TurnSwitcher(_board);
+			_playerAI = new PlayerAI(_inputHandler, _board);
 
 			foreach (var checker in _board.CheckersWhite.Concat(_board.CheckersBlack))
 			{
@@ -61,11 +64,14 @@ namespace Chapaev.Core
 			_turnSwitcher.MoveCompleteEvent += () =>
 			{
 				_turnSwitcher.TurnActiveColorSide();
+				if (_turnSwitcher.GetActiveColorSide() == CheckerColor.BLACK)
+				{
+					_playerAI.SelectPushChecker();
+					_playerAI.SelectTargetChecker();
+					_playerAI.Press();
+					_playerAI.Release();
+				}
 			};
-
-			//AIClick();
-			
-			_forceLine = new ForceLine();
 		}
 
 		private void Update()
