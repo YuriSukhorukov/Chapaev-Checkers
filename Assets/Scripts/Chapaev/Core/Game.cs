@@ -1,7 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Assets.Scripts.Chapaev.Core;
+using Assets.Scripts.Chapaev.UI;
 using Assets.Scripts.Chapaev.Values;
+using Chapaev.Components;
 using Chapaev.Entities;
 using Chapaev.Interfaces;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace Chapaev.Core
 		private Board _board;
 		private TurnSwitcher _turnSwitcher;
 		private PlayerAI _playerAI;
+		private UI _ui;
 
 		private GameState _state = GameState.BEGIN;
 
@@ -27,6 +29,10 @@ namespace Chapaev.Core
 
 		private void Start ()
 		{
+			_ui = new UI();
+			_ui.Manager.btn_select_white.onClick.AddListener(()=>{print("btn_select_white");});
+			_ui.Manager.btn_select_black.onClick.AddListener(()=>{print("btn_select_black");});
+			
 			EnemyCheckerColor = PlayerCheckerColor == CheckerColor.WHITE ? CheckerColor.BLACK : CheckerColor.WHITE;
 			
 			_forceCalculator = new ForceCalculator();
@@ -43,16 +49,6 @@ namespace Chapaev.Core
 				_board,
 				PlayerCheckerColor == CheckerColor.WHITE ? CheckerColor.BLACK : CheckerColor.WHITE
 			);
-
-			_board.CheckersIsEmty += (color) =>
-			{
-				if (color == PlayerCheckerColor)
-					print("win");
-				else if (color == EnemyCheckerColor)
-					print("loose");
-
-				_state = GameState.GAME_OVER;
-			};
 
 			_inputHandler.OnDownEvent += (position) =>
 			{
@@ -78,6 +74,7 @@ namespace Chapaev.Core
 				checker1.BouncingBorderEvent += () =>
 				{
 					_board.RemoveChecker(checker1);
+					_board.CheckEmpty();
 					
 					if(checker1.CheckerColor != _turnSwitcher.GetActiveColorSide())
 						_turnSwitcher.RepeatActiveColorSide();
@@ -91,6 +88,16 @@ namespace Chapaev.Core
 				{
 					_playerAI.StartAiming();
 				}
+			};
+			
+			_board.CheckersIsEmty += (color) =>
+			{
+				if (color == EnemyCheckerColor)
+					print("win");
+				else if (color == PlayerCheckerColor)
+					print("loose");
+
+				_state = GameState.GAME_OVER;
 			};
 			
 			if(PlayerCheckerColor == CheckerColor.BLACK)

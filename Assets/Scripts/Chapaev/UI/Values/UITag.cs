@@ -1,0 +1,4 @@
+﻿public enum UITag {
+    BUTTON_SELECT_WHITE,
+    BUTTON_SELECT_BLACK
+}

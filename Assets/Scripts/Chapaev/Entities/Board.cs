@@ -48,11 +48,16 @@ namespace Chapaev.Entities
             else if(checker.CheckerColor == CheckerColor.BLACK)
                 CheckersBlack.Remove(checker);
             
-            Object.Destroy(checker.gameObject);
+            checker.gameObject.SetActive(false);
             
             CheckersWhite.RemoveAll(item => item == null);
             CheckersBlack.RemoveAll(item => item == null);
 
+            CheckEmpty();
+        }
+
+        public void CheckEmpty()
+        {
             if (CheckersWhite.Count == 0)
             {
                 if (CheckersIsEmty != null)
