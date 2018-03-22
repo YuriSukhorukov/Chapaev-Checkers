@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Assets.Scripts.Chapaev.Core;
 using Chapaev.Entities;
 using Chapaev.Interfaces;
@@ -15,10 +16,12 @@ namespace Chapaev.Core
 		private IPusher _pusher;
 		private IPushed _pushed;
 		private Board _board;
+		private TurnSwitcher _turnSwitcher;
 
-		public CheckerColor ActiveCheckerColor;
+//		public CheckerColor ActiveCheckerColor;
 
-		private void Start () {
+		private void Start ()
+		{	
 			_forceCalculator = new ForceCalculator();
 			_selector = new Selector3D();
 			_pusher = new Pusher();
@@ -26,28 +29,37 @@ namespace Chapaev.Core
 			_inputHandler = new MouseInputHandler();
 
 			_board = _boardBuilder.Build();
+			_turnSwitcher = new TurnSwitcher(_board);
 
 			foreach (var checker in _board.CheckersWhite.Concat(_board.CheckersBlack))
 			{
 				var checker1 = checker;
 				checker1.SelectEvent += () => { _pushed = checker1.GetComponent<IPushed>(); };
+				checker1.BouncingBorderEvent += () =>
+				{
+					_board.RemoveChecker(checker1);
+					if(checker1.CheckerColor != _turnSwitcher.GetActiveColorSide())
+						_turnSwitcher.RepeatActiveColorSide();
+				};
 			}
 
 			_inputHandler.OnDownEvent += (position) => _selector.SelectFrom(position);
-			_inputHandler.OnUpEvent += (distance) =>
+			_inputHandler.OnUpEvent += PushCheckerWithForce;
+
+			_turnSwitcher.MoveCompleteEvent += () =>
 			{
-				_pusher.SetForce(_forceCalculator.GetForce(distance));
-				MakeMove();
+				_turnSwitcher.TurnActiveColorSide();
 			};
 
-			AIClick();
+			//AIClick();
 		}
 
 		private void Update()
 		{
+			_turnSwitcher.UpdateState();
+			
 			if (Input.GetMouseButtonDown(0))
 			{
-				print(Input.mousePosition);
 				_inputHandler.OnDown(Input.mousePosition);
 			}
 
@@ -55,17 +67,19 @@ namespace Chapaev.Core
 			{
 				_inputHandler.OnUp(Input.mousePosition);
 			}
+
+//			ActiveCheckerColor = _turnSwitcher.GetActiveColorSide();
 		}
-		
-		private void MakeMove()
-		{	
-			if(_pushed == null) return;
-			
-			if(((MonoBehaviour) _pushed).GetComponent<CheckerBase>().CheckerColor != ActiveCheckerColor) return;
-			
-			ActiveCheckerColor = ActiveCheckerColor == CheckerColor.WHITE ? CheckerColor.BLACK : CheckerColor.WHITE;
-			
+
+		private void PushCheckerWithForce(Vector3 distance)
+		{
+			if (_pushed == null) return;
+			if(_turnSwitcher.IsPossibleMakeMove() == false) return;
+			if (((MonoBehaviour) _pushed).GetComponent<CheckerBase>().CheckerColor != _turnSwitcher.GetActiveColorSide()) return;
+
+			_pusher.SetForce(_forceCalculator.GetForce(distance));
 			_pusher.Push(_pushed);
+			_turnSwitcher.Move();
 			_pushed = null;
 		}
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Chapaev.Entities
 {
@@ -34,6 +35,16 @@ namespace Chapaev.Entities
             if(CheckersWhite == null)
                 CheckersWhite = new List<CheckerBase>();
             CheckersBlack = checkers.ToList();
+        }
+
+        public void RemoveChecker(CheckerBase checker)
+        {
+            if(checker.CheckerColor == CheckerColor.WHITE)
+                 CheckersWhite.Remove(checker);
+            else if(checker.CheckerColor == CheckerColor.BLACK)
+                CheckersBlack.Remove(checker);
+            
+            Object.Destroy(checker.gameObject);
         }
     }
 }
