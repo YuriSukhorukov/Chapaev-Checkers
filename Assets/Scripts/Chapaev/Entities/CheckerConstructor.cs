@@ -1,4 +1,5 @@
-﻿using Chapaev.Interfaces;
+﻿using Assets.Scripts.Chapaev.Values;
+using Chapaev.Interfaces;
 using UnityEngine;
 
 namespace Chapaev.Entities

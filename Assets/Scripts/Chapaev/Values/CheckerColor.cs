@@ -1,4 +1,7 @@
-﻿public enum CheckerColor
+﻿namespace Assets.Scripts.Chapaev.Values
 {
-	WHITE = 0, BLACK = 1
+	public enum CheckerColor
+	{
+		WHITE = 0, BLACK = 1
+	}
 }

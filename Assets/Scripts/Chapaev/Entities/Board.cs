@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using Assets.Scripts.Chapaev.Values;
+using Object = UnityEngine.Object;
 
 namespace Chapaev.Entities
 {
@@ -8,6 +10,8 @@ namespace Chapaev.Entities
     {
         public List<CheckerBase> CheckersWhite { get; private set; }
         public List<CheckerBase> CheckersBlack { get; private set; }
+
+        public event Action<CheckerColor> CheckersIsEmty;
         
         public void AddWhiteFigure(CheckerBase checker)
         {
@@ -38,13 +42,27 @@ namespace Chapaev.Entities
         }
 
         public void RemoveChecker(CheckerBase checker)
-        {
+        {   
             if(checker.CheckerColor == CheckerColor.WHITE)
                  CheckersWhite.Remove(checker);
             else if(checker.CheckerColor == CheckerColor.BLACK)
                 CheckersBlack.Remove(checker);
             
             Object.Destroy(checker.gameObject);
+            
+            CheckersWhite.RemoveAll(item => item == null);
+            CheckersBlack.RemoveAll(item => item == null);
+
+            if (CheckersWhite.Count == 0)
+            {
+                if (CheckersIsEmty != null)
+                    CheckersIsEmty(CheckerColor.WHITE);
+            }
+            if (CheckersBlack.Count == 0)
+            {
+                if (CheckersIsEmty != null)
+                    CheckersIsEmty(CheckerColor.BLACK);
+            }
         }
     }
 }

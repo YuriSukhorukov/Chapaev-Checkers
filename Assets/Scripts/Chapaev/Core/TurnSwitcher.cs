@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Chapaev.Values;
 using Chapaev.Entities;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ namespace Assets.Scripts.Chapaev.Core
             bool noOneCheckerMove = true;
             for (int i = 0; i < _board.CheckersWhite.Count; i++)
             {
-                if (_board.CheckersWhite[i].GetSpeed() > 1f)
+                if (_board.CheckersWhite[i].GetSpeed() != 0)
                 {
                     noOneCheckerMove = false;
                     break;
@@ -31,7 +32,7 @@ namespace Assets.Scripts.Chapaev.Core
 
             for (int i = 0; i < _board.CheckersBlack.Count; i++)
             {
-                if (_board.CheckersBlack[i].GetSpeed() > 1f)
+                if (_board.CheckersBlack[i].GetSpeed() != 0)
                 {
                     noOneCheckerMove = false;
                     break;

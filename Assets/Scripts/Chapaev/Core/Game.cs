@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Assets.Scripts.Chapaev.Core;
+using Assets.Scripts.Chapaev.Values;
 using Chapaev.Entities;
 using Chapaev.Interfaces;
 using UnityEngine;
@@ -20,6 +21,8 @@ namespace Chapaev.Core
 		private ForceLine _forceLine;
 		private PlayerAI _playerAI;
 
+		private GameState _state = GameState.BEGIN;
+
 //		public CheckerColor ActiveCheckerColor;
 
 		private void Start ()
@@ -34,6 +37,16 @@ namespace Chapaev.Core
 			_board = _boardBuilder.Build();
 			_turnSwitcher = new TurnSwitcher(_board);
 			_playerAI = new PlayerAI(_inputHandler, _board);
+
+			_board.CheckersIsEmty += (color) =>
+			{
+				if (color == CheckerColor.BLACK)
+					print("win");
+				else if (color == CheckerColor.BLACK)
+					print("loose");
+
+				_state = GameState.GAME_OVER;
+			};
 
 			foreach (var checker in _board.CheckersWhite.Concat(_board.CheckersBlack))
 			{
@@ -57,7 +70,10 @@ namespace Chapaev.Core
 
 			_inputHandler.OnDownEvent += (position) =>
 			{
-				_selector.SelectFrom(position);
+				if (_state == GameState.BEGIN)
+					_state = GameState.PLAY;
+				if(_state == GameState.PLAY)
+					_selector.SelectFrom(position);
 			};
 			_inputHandler.OnUpEvent += PushCheckerWithForce;
 
@@ -66,24 +82,22 @@ namespace Chapaev.Core
 				_turnSwitcher.TurnActiveColorSide();
 				if (_turnSwitcher.GetActiveColorSide() == CheckerColor.BLACK)
 				{
-					_playerAI.SelectPushChecker();
-					_playerAI.SelectTargetChecker();
-					_playerAI.Press();
-					_playerAI.Release();
+					_playerAI.StartAiming();
 				}
 			};
 		}
 
 		private void Update()
 		{	
-			_turnSwitcher.UpdateState();
+			if(_state == GameState.PLAY)
+				_turnSwitcher.UpdateState();
 			
-			if (Input.GetMouseButtonDown(0))
+			if (Input.GetMouseButtonDown(0) && _turnSwitcher.GetActiveColorSide() == CheckerColor.WHITE)
 			{
 				_inputHandler.OnDown(Input.mousePosition);
 			}
 
-			if (Input.GetMouseButtonUp(0))
+			if (Input.GetMouseButtonUp(0) && _turnSwitcher.GetActiveColorSide() == CheckerColor.WHITE)
 			{
 				_inputHandler.OnUp(Input.mousePosition);
 			}
@@ -94,6 +108,8 @@ namespace Chapaev.Core
 					_forceLine.SetEndPoint(Input.mousePosition);
 			}
 //			ActiveCheckerColor = _turnSwitcher.GetActiveColorSide();
+			_playerAI.Aiming();
+			//print(_turnSwitcher.GetActiveColorSide());
 		}
 
 		private void PushCheckerWithForce(Vector3 distance)
@@ -104,10 +120,9 @@ namespace Chapaev.Core
 
 			_pusher.SetForce(_forceCalculator.GetForce(distance));
 			_pusher.Push(_pushed);
-			_turnSwitcher.Move();
 			_pushed = null;
-			
 			_forceLine.Hide();
+			_turnSwitcher.Move();
 		}
 
 		private void AIClick()
