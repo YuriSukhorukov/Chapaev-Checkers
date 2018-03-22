@@ -17,6 +17,7 @@ namespace Chapaev.Core
 		private IPushed _pushed;
 		private Board _board;
 		private TurnSwitcher _turnSwitcher;
+		private ForceLine _forceLine;
 
 //		public CheckerColor ActiveCheckerColor;
 
@@ -34,16 +35,27 @@ namespace Chapaev.Core
 			foreach (var checker in _board.CheckersWhite.Concat(_board.CheckersBlack))
 			{
 				var checker1 = checker;
-				checker1.SelectEvent += () => { _pushed = checker1.GetComponent<IPushed>(); };
+				checker1.SelectEvent += () =>
+				{
+					if (checker1.CheckerColor == _turnSwitcher.GetActiveColorSide())
+					{
+						_pushed = checker1.GetComponent<IPushed>();
+						_forceLine.SetBeginPoint(checker1.gameObject.transform.position);
+					}
+				};
 				checker1.BouncingBorderEvent += () =>
 				{
 					_board.RemoveChecker(checker1);
+					
 					if(checker1.CheckerColor != _turnSwitcher.GetActiveColorSide())
 						_turnSwitcher.RepeatActiveColorSide();
 				};
 			}
 
-			_inputHandler.OnDownEvent += (position) => _selector.SelectFrom(position);
+			_inputHandler.OnDownEvent += (position) =>
+			{
+				_selector.SelectFrom(position);
+			};
 			_inputHandler.OnUpEvent += PushCheckerWithForce;
 
 			_turnSwitcher.MoveCompleteEvent += () =>
@@ -52,10 +64,12 @@ namespace Chapaev.Core
 			};
 
 			//AIClick();
+			
+			_forceLine = new ForceLine();
 		}
 
 		private void Update()
-		{
+		{	
 			_turnSwitcher.UpdateState();
 			
 			if (Input.GetMouseButtonDown(0))
@@ -68,6 +82,11 @@ namespace Chapaev.Core
 				_inputHandler.OnUp(Input.mousePosition);
 			}
 
+			if (Input.GetMouseButton(0))
+			{
+				if (_pushed != null)
+					_forceLine.SetEndPoint(Input.mousePosition);
+			}
 //			ActiveCheckerColor = _turnSwitcher.GetActiveColorSide();
 		}
 
@@ -81,6 +100,8 @@ namespace Chapaev.Core
 			_pusher.Push(_pushed);
 			_turnSwitcher.Move();
 			_pushed = null;
+			
+			_forceLine.Hide();
 		}
 
 		private void AIClick()
