@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Assets.Scripts.Chapaev.Core;
 using Assets.Scripts.Chapaev.UI;
 using Assets.Scripts.Chapaev.Values;
@@ -37,8 +38,7 @@ namespace Chapaev.Core
 
 			_playerAI = new PlayerAI(
 				_inputHandler,
-				_board,
-				_turnSwitcher.EnemyCheckerColor
+				_board
 			);
 
 			InitUIHandler();
@@ -69,6 +69,12 @@ namespace Chapaev.Core
 		private void StartGame()
 		{
 			_state = GameState.PLAY;
+
+			_ui.Manager.txt_checkers_on_board.text = String.Format(
+				"White: {0}; Black: {1}",
+				_board.GetCheckersWhiteCount().ToString(),
+				_board.GetCheckersBlackCount().ToString()
+			);
 			
 			if(_turnSwitcher.PlayerCheckerColor == CheckerColor.BLACK)
 				_playerAI.StartAiming();
@@ -115,6 +121,12 @@ namespace Chapaev.Core
 					
 					_board.RemoveChecker(checker1);
 					_board.CheckEmpty();
+					
+					_ui.Manager.txt_checkers_on_board.text = String.Format(
+						"White: {0}; Black: {1}",
+						_board.GetCheckersWhiteCount().ToString(),
+						_board.GetCheckersBlackCount().ToString()
+					);
 				};
 			}
 		}
@@ -149,6 +161,7 @@ namespace Chapaev.Core
 				if (_state == GameState.BEGIN)
 				{
 					_turnSwitcher.SetPlayerColor(CheckerColor.WHITE);
+					_playerAI.SetColor(CheckerColor.BLACK);
 					StartGame();
 				}
 			});
@@ -157,6 +170,7 @@ namespace Chapaev.Core
 				if (_state == GameState.BEGIN)
 				{
 					_turnSwitcher.SetPlayerColor(CheckerColor.BLACK);
+					_playerAI.SetColor(CheckerColor.WHITE);
 					StartGame();
 				}
 			});

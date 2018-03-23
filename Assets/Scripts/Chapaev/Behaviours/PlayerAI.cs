@@ -3,6 +3,7 @@ using Assets.Scripts.Chapaev.Values;
 using Chapaev.Entities;
 using Chapaev.Interfaces;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Chapaev.Core
 {
@@ -25,11 +26,14 @@ namespace Assets.Scripts.Chapaev.Core
         private List<CheckerBase> _myCheckers;
         private List<CheckerBase> _enemyCheckers;
 
-        public PlayerAI(IInputHandler mouseInputHandler, Board board, CheckerColor checkerColor)
+        public PlayerAI(IInputHandler mouseInputHandler, Board board)
         {
             _inputHandler = mouseInputHandler;
             _board = board;
+        }
 
+        public void SetColor(CheckerColor checkerColor)
+        {
             switch (checkerColor)
             {
                 case CheckerColor.WHITE:

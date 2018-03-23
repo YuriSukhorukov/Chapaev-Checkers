@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Chapaev.Values;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Chapaev.Entities
@@ -49,9 +50,6 @@ namespace Chapaev.Entities
                 CheckersBlack.Remove(checker);
             
             checker.gameObject.SetActive(false);
-            
-            CheckersWhite.RemoveAll(item => item == null);
-            CheckersBlack.RemoveAll(item => item == null);
 
             CheckEmpty();
         }
@@ -68,6 +66,25 @@ namespace Chapaev.Entities
                 if (CheckersIsEmty != null)
                     CheckersIsEmty(CheckerColor.BLACK);
             }
+        }
+        
+        public int GetCheckersWhiteCount()
+        {
+            return GetCheckersCount(CheckersWhite);
+        }
+        public int GetCheckersBlackCount()
+        {
+            return GetCheckersCount(CheckersBlack);
+        }
+        
+        private int GetCheckersCount(List<CheckerBase> checkers)
+        {
+            int count = 0;
+            for (int i = 0; i < checkers.Count; i++)
+            {
+                if (checkers[i].enabled) count++;
+            }
+            return count;
         }
     }
 }
