@@ -134,6 +134,11 @@ namespace Chapaev.Core
 				_turnSwitcher.TurnActiveColorSide();
 				if (_turnSwitcher.GetActiveColorSide() == _turnSwitcher.EnemyCheckerColor)
 					_playerAI.StartAiming();
+				
+				if(_turnSwitcher.GetActiveColorSide() == _turnSwitcher.PlayerCheckerColor)
+					_ui.CurrentLivePlayer();
+				else
+					_ui.CurrentAIPlayer();
 			};
 		}
 

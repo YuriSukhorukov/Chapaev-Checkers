@@ -40,5 +40,15 @@ namespace Assets.Scripts.Chapaev.UI
         {
             Manager.btn_restart_scene.gameObject.SetActive(true);
         }
+
+        public void CurrentLivePlayer()
+        {
+            Manager.txt_current_player.text = "you";
+        }
+        
+        public void CurrentAIPlayer()
+        {
+            Manager.txt_current_player.text = "bot";
+        }
     }
 }
