@@ -6,6 +6,7 @@ using Assets.Scripts.Chapaev.Values;
 using Chapaev.Entities;
 using Chapaev.Interfaces;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Chapaev.Core
 {
@@ -46,6 +47,8 @@ namespace Chapaev.Core
 			InitCheckersHandler();
 			InitTurnSwitcherHandler();
 			InitBoardHandler();
+			
+			_ui.SelectYourColourText();
 		}
 
 		private void Update()
@@ -63,21 +66,18 @@ namespace Chapaev.Core
 				_inputHandler.OnUp(Input.mousePosition);
 			}
 
-			_playerAI.Aiming();
+			if (_state == GameState.PLAY)
+				_playerAI.Aiming();
 		}
 		
 		private void StartGame()
 		{
 			_state = GameState.PLAY;
 
-			_ui.Manager.txt_checkers_on_board.text = String.Format(
-				"White: {0}; Black: {1}",
-				_board.GetCheckersWhiteCount().ToString(),
-				_board.GetCheckersBlackCount().ToString()
-			);
-			
 			if(_turnSwitcher.PlayerCheckerColor == CheckerColor.BLACK)
 				_playerAI.StartAiming();
+			
+			_ui.SetCheckersCountInText(_board.GetCheckersWhiteCount(), _board.GetCheckersBlackCount());
 		}
 
 		private void InitInputHandler()
@@ -121,12 +121,8 @@ namespace Chapaev.Core
 					
 					_board.RemoveChecker(checker1);
 					_board.CheckEmpty();
-					
-					_ui.Manager.txt_checkers_on_board.text = String.Format(
-						"White: {0}; Black: {1}",
-						_board.GetCheckersWhiteCount().ToString(),
-						_board.GetCheckersBlackCount().ToString()
-					);
+
+					_ui.SetCheckersCountInText(_board.GetCheckersWhiteCount(), _board.GetCheckersBlackCount());
 				};
 			}
 		}
@@ -145,12 +141,15 @@ namespace Chapaev.Core
 		{
 			_board.CheckersIsEmty += (color) =>
 			{
+				if(_state != GameState.PLAY) return;
+				
 				if (color == _turnSwitcher.EnemyCheckerColor)
-					print("win");
+					_ui.WinText();
 				else if (color == _turnSwitcher.PlayerCheckerColor)
-					print("loose");
+					_ui.LooseText();
 
 				_state = GameState.GAME_OVER;
+				_ui.ShowRestartButton();
 			};
 		}
 
@@ -173,6 +172,11 @@ namespace Chapaev.Core
 					_playerAI.SetColor(CheckerColor.WHITE);
 					StartGame();
 				}
+			});
+			
+			_ui.Manager.btn_restart_scene.onClick.AddListener(() =>
+			{
+				SceneManager.LoadScene("Game");
 			});
 		}
 	}
