@@ -32,7 +32,7 @@ namespace Assets.Scripts.Chapaev.Core
             bool noOneCheckerMove = true;
             for (int i = 0; i < _board.CheckersWhite.Count; i++)
             {
-                if (Math.Abs(_board.CheckersWhite[i].GetSpeed()) > 0.01f)
+                if (Math.Abs(_board.CheckersWhite[i].GetSpeed()) > 0.02f)
                 {
                     noOneCheckerMove = false;
                     break;
@@ -41,7 +41,7 @@ namespace Assets.Scripts.Chapaev.Core
 
             for (int i = 0; i < _board.CheckersBlack.Count; i++)
             {
-                if (Math.Abs(_board.CheckersBlack[i].GetSpeed()) > 0.01f)
+                if (Math.Abs(_board.CheckersBlack[i].GetSpeed()) > 0.02f)
                 {
                     noOneCheckerMove = false;
                     break;

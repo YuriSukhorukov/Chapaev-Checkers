@@ -41,10 +41,17 @@ namespace Assets.Scripts.Chapaev.Core
 			);
 
 			InitUIHandler();
-			InitInputHandler();
-			InitCheckersHandler();
-			InitTurnSwitcherHandler();
-			InitBoardHandler();
+			_inputHandler.OnDownEvent += OnDownEventHandler;
+			_inputHandler.OnUpEvent += OnUpEventHandler;
+			_turnSwitcher.MoveCompleteEvent += MoveCompleteEventHandler;
+			_board.CheckersIsEmty += CheckersIsEmtyEventHandler;
+			
+			foreach (var checker in _board.CheckersWhite.Concat(_board.CheckersBlack))
+			{
+				var checker1 = checker;
+				checker1.SelectEvent += () => SelectEventHandler(checker1);
+				checker1.BouncingBorderEvent += () => BouncingBorderEventHandler(checker1);
+			}
 			
 			_ui.SelectYourColourText();
 		}
@@ -78,82 +85,65 @@ namespace Assets.Scripts.Chapaev.Core
 			_ui.SetCheckersCountInText(_board.GetCheckersWhiteCount(), _board.GetCheckersBlackCount());
 		}
 
-		private void InitInputHandler()
+		void OnDownEventHandler(Vector3 position)
 		{
-			_inputHandler.OnDownEvent += (position) =>
-			{
-				if(_state == GameState.PLAY)
-					_selector.SelectFrom(position);
-			};
-
-			_inputHandler.OnUpEvent += (distance) =>
-			{
-				if (_pushed == null) return;
-				if(_turnSwitcher.IsPossibleMakeMove() == false) return;
-				if (((MonoBehaviour) _pushed).GetComponent<CheckerBase>().CheckerColor != _turnSwitcher.GetActiveColorSide()) return;
-				
-				_pusher.SetForce(_forceCalculator.GetForce(distance));
-				_pusher.Push(_pushed);
-				_pushed = null;
-				
-				_turnSwitcher.Move();
-			};
+			if(_state == GameState.PLAY)
+				_selector.SelectFrom(position);
 		}
 
-		private void InitCheckersHandler()
+		void OnUpEventHandler(Vector3 distance)
 		{
-			foreach (var checker in _board.CheckersWhite.Concat(_board.CheckersBlack))
-			{
-				var checker1 = checker;
+			if (_pushed == null) return;
+			if(_turnSwitcher.IsPossibleMakeMove() == false) return;
+			if (((MonoBehaviour) _pushed).GetComponent<CheckerBase>().CheckerColor != _turnSwitcher.GetActiveColorSide()) return;
 				
-				checker1.SelectEvent += () =>
-				{
-					if (checker1.CheckerColor == _turnSwitcher.GetActiveColorSide())
-						_pushed = checker1.GetComponent<IPushed>();
-				};
+			_pusher.SetForce(_forceCalculator.GetForce(distance));
+			_pusher.Push(_pushed);
+			_pushed = null;
 				
-				checker1.BouncingBorderEvent += () =>
-				{	
-					if(checker1.CheckerColor != _turnSwitcher.GetActiveColorSide())
-						_turnSwitcher.RepeatActiveColorSide();
+			_turnSwitcher.Move();
+		}
+
+		void SelectEventHandler(CheckerBase checker)
+		{
+			if (checker.CheckerColor == _turnSwitcher.GetActiveColorSide())
+				_pushed = checker.GetComponent<IPushed>();
+		}
+
+		void BouncingBorderEventHandler(CheckerBase checker)
+		{
+			if(checker.CheckerColor != _turnSwitcher.GetActiveColorSide())
+				_turnSwitcher.RepeatActiveColorSide();
 					
-					_board.RemoveChecker(checker1);
-					_board.CheckEmpty();
+			_board.RemoveChecker(checker);
+			_board.CheckEmpty();
 
-					_ui.SetCheckersCountInText(_board.GetCheckersWhiteCount(), _board.GetCheckersBlackCount());
-				};
-			}
+			_ui.SetCheckersCountInText(_board.GetCheckersWhiteCount(), _board.GetCheckersBlackCount());
 		}
 
-		private void InitTurnSwitcherHandler()
+		void MoveCompleteEventHandler()
 		{
-			_turnSwitcher.MoveCompleteEvent += () =>
-			{
-				_turnSwitcher.TurnActiveColorSide();
-				if (_turnSwitcher.GetActiveColorSide() == _turnSwitcher.EnemyCheckerColor)
-					_playerAI.StartAiming();
+			_turnSwitcher.TurnActiveColorSide();
+			if (_turnSwitcher.GetActiveColorSide() == _turnSwitcher.EnemyCheckerColor)
+				_playerAI.StartAiming();
 				
-				if(_turnSwitcher.GetActiveColorSide() == _turnSwitcher.PlayerCheckerColor)
-					_ui.CurrentLivePlayer();
-				else
-					_ui.CurrentAIPlayer();
-			};
+			if(_turnSwitcher.GetActiveColorSide() == _turnSwitcher.PlayerCheckerColor)
+				_ui.CurrentLivePlayer();
+			else
+				_ui.CurrentAIPlayer();
 		}
 
-		private void InitBoardHandler()
+		void CheckersIsEmtyEventHandler(CheckerColor color)
 		{
-			_board.CheckersIsEmty += (color) =>
-			{
-				if(_state != GameState.PLAY) return;
+			if(_state != GameState.PLAY) return;
 				
-				if (color == _turnSwitcher.EnemyCheckerColor)
-					_ui.WinText();
-				else if (color == _turnSwitcher.PlayerCheckerColor)
-					_ui.LooseText();
+			if (color == _turnSwitcher.EnemyCheckerColor)
+				_ui.WinText();
+			else if (color == _turnSwitcher.PlayerCheckerColor)
+				_ui.LooseText();
 
-				_state = GameState.GAME_OVER;
-				_ui.ShowRestartButton();
-			};
+			_state = GameState.GAME_OVER;
+			_ui.ShowRestartButton();
 		}
 
 		private void InitUIHandler()
