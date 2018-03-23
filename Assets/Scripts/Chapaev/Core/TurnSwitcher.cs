@@ -1,7 +1,6 @@
 ﻿using System;
+using Assets.Scripts.Chapaev.Entities;
 using Assets.Scripts.Chapaev.Values;
-using Chapaev.Entities;
-using UnityEngine;
 
 namespace Assets.Scripts.Chapaev.Core
 {

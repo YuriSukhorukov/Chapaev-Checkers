@@ -1,5 +1,5 @@
 ﻿using System;
-using Chapaev.Interfaces;
+using Assets.Scripts.Chapaev.Interfaces;
 using UnityEngine;
 
 namespace Assets.Scripts.Chapaev.Core

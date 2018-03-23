@@ -1,14 +1,12 @@
-﻿using System;
-using System.Linq;
-using Assets.Scripts.Chapaev.Core;
-using Assets.Scripts.Chapaev.UI;
+﻿using System.Linq;
+using Assets.Scripts.Chapaev.Behaviours;
+using Assets.Scripts.Chapaev.Entities;
+using Assets.Scripts.Chapaev.Interfaces;
 using Assets.Scripts.Chapaev.Values;
-using Chapaev.Entities;
-using Chapaev.Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Chapaev.Core
+namespace Assets.Scripts.Chapaev.Core
 {
 	public class Game : MonoBehaviour
 	{
@@ -23,11 +21,11 @@ namespace Chapaev.Core
 		private Board _board;
 		private TurnSwitcher _turnSwitcher;
 		private PlayerAI _playerAI;
-		private UI _ui;
+		private UI.Core.UI _ui;
 
 		private void Start ()
 		{
-			_ui = new UI();
+			_ui = new UI.Core.UI();
 			_forceCalculator = new ForceCalculator();
 			_selector = new Selector3D();
 			_pusher = new Pusher();

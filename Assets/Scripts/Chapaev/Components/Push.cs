@@ -1,7 +1,7 @@
-﻿using Chapaev.Interfaces;
+﻿using Assets.Scripts.Chapaev.Interfaces;
 using UnityEngine;
 
-namespace Chapaev.Components
+namespace Assets.Scripts.Chapaev.Components
 {
     public class Push: MonoBehaviour, IPushed
     {

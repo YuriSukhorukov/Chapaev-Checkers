@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Chapaev.Values;
-using Chapaev.Interfaces;
+﻿using Assets.Scripts.Chapaev.Interfaces;
+using Assets.Scripts.Chapaev.Values;
 using UnityEngine;
 
-namespace Chapaev.Entities
+namespace Assets.Scripts.Chapaev.Entities
 {
     public class CheckerConstructor: IConstructor<CheckerBase>
     {

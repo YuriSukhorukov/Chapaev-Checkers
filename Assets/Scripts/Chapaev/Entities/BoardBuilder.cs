@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Chapaev.Interfaces;
-using Chapaev.Entities;
+using Assets.Scripts.Chapaev.Interfaces;
 using UnityEngine;
 
-namespace Chapaev.Entities
+namespace Assets.Scripts.Chapaev.Entities
 {
     public class BoardBuilder : IBoardBuilder
     {

@@ -1,7 +1,7 @@
-﻿using Chapaev.Interfaces;
+﻿using Assets.Scripts.Chapaev.Interfaces;
 using UnityEngine;
 
-namespace Chapaev.Entities
+namespace Assets.Scripts.Chapaev.Entities
 {
     public class CheckerPrefabsRepository : MonoBehaviour, IPrefabsRepository
     {

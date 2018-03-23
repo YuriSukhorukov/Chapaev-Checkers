@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Chapaev.Entities;
+using Assets.Scripts.Chapaev.Interfaces;
 using Assets.Scripts.Chapaev.Values;
-using Chapaev.Entities;
-using Chapaev.Interfaces;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Assets.Scripts.Chapaev.Core
+namespace Assets.Scripts.Chapaev.Behaviours
 {
     public class PlayerAI
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Chapaev.Core
+namespace Assets.Scripts.Chapaev.Entities
 {
     public class ForceLine
     {

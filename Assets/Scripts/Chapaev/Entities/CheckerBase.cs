@@ -1,14 +1,13 @@
 ﻿using System;
+using Assets.Scripts.Chapaev.Interfaces;
 using Assets.Scripts.Chapaev.Values;
-using Chapaev.Interfaces;
 using UnityEngine;
 
-namespace Chapaev.Entities
+namespace Assets.Scripts.Chapaev.Entities
 {
     public class CheckerBase : MonoBehaviour, ISelectable
     {
         public event Action SelectEvent;
-        public event Action DestroyEvent;
         public event Action BouncingBorderEvent;
         public CheckerColor CheckerColor { get; set; }
         

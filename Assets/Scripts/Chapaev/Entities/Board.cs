@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Chapaev.Values;
-using UnityEngine;
-using Object = UnityEngine.Object;
 
-namespace Chapaev.Entities
+namespace Assets.Scripts.Chapaev.Entities
 {
     public class Board
     {

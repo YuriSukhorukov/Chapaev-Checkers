@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Chapaev.Core;
+using Assets.Scripts.Chapaev.UI.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Chapaev.UI
+namespace Assets.Scripts.Chapaev.UI.Core
 {
     public class Manager : MonoBehaviour
     {

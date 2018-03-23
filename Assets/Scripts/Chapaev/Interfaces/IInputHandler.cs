@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Chapaev.Interfaces
+namespace Assets.Scripts.Chapaev.Interfaces
 {
     public interface IInputHandler
     {

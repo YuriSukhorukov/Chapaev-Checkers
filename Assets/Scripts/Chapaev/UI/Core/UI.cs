@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Chapaev.UI
+namespace Assets.Scripts.Chapaev.UI.Core
 {
     public class UI
     {

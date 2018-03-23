@@ -1,7 +1,7 @@
-﻿using Chapaev.Interfaces;
+﻿using Assets.Scripts.Chapaev.Interfaces;
 using UnityEngine;
 
-namespace Chapaev.Behaviours
+namespace Assets.Scripts.Chapaev.Core
 {
     public class Selector2D : ISelector
     {

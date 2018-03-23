@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Chapaev.UI
+namespace Assets.Scripts.Chapaev.UI.Components
 {
     public class UIMarker : MonoBehaviour
     {

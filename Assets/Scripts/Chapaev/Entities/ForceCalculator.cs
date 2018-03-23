@@ -1,7 +1,7 @@
-﻿using Chapaev.Interfaces;
+﻿using Assets.Scripts.Chapaev.Interfaces;
 using UnityEngine;
 
-namespace Chapaev.Core
+namespace Assets.Scripts.Chapaev.Entities
 {
     public class ForceCalculator : IForceCalculator
     {
@@ -34,7 +34,6 @@ namespace Chapaev.Core
         public Vector3 GetForce(Vector3 distance)
         {   
             Vector3 force = distance / K;
-            //force.y = 0;
             force = force.magnitude > MaxForceMagnitude ? force * (MaxForceMagnitude / force.magnitude) : force;
 
             return force;

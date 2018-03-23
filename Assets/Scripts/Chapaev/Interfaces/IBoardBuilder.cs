@@ -1,6 +1,6 @@
-﻿using Chapaev.Entities;
+﻿using Assets.Scripts.Chapaev.Entities;
 
-namespace Chapaev.Interfaces
+namespace Assets.Scripts.Chapaev.Interfaces
 {
     public interface IBoardBuilder{
         Board Build();
