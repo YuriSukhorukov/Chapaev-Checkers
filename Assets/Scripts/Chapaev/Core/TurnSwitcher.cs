@@ -8,14 +8,24 @@ namespace Assets.Scripts.Chapaev.Core
     public class TurnSwitcher
     {
         public event Action MoveCompleteEvent;
+        
         private Board _board;
         private bool _canMove = true;
         private CheckerColor _activeCheckerColor;
         private bool _repeatMove = false;
+        
+        public CheckerColor PlayerCheckerColor;
+        public CheckerColor EnemyCheckerColor;
 
         public TurnSwitcher(Board board)
         {
             _board = board;
+        }
+        
+        public void SetPlayerColor(CheckerColor checkerColor)
+        {			
+            PlayerCheckerColor = checkerColor;
+            EnemyCheckerColor = PlayerCheckerColor == CheckerColor.WHITE ? CheckerColor.BLACK : CheckerColor.WHITE;
         }
 
         public void UpdateState()
